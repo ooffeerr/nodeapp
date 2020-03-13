@@ -107,4 +107,4 @@ dist
 .vscode-test
 
 # TS build files
-.build/
+/build/*
