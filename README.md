@@ -11,6 +11,7 @@
 
  the future: for the purpose of tempering with stuff, a chat app can cover most of the things I wanna touch:
  1. rabbit/kafka msg queue
+ 2. graphql
  2. redis
  3. docker
  4. kubernaties/helm.
