@@ -1,6 +1,6 @@
 const { Pool } = require('pg');
 
-DATABASE_URL = 'postgres://pg-user:1234@127.0.0.1:5432/pg-user';
+var DATABASE_URL = 'postgres://pg-user:1234@127.0.0.1:5432/pg-user';
 
 const pool = new Pool({
     connectionString: DATABASE_URL
