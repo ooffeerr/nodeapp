@@ -1,8 +1,8 @@
 {
   "development": {
-    "username": "pg-user",
-    "password": "1234",
-    "database": "pg-user",
+    "username": "postgres",
+    "password": "",
+    "database": "postgres",
     "host": "127.0.0.1",
     "dialect": "postgres",
     "operatorsAliases": false
