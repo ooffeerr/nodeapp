@@ -6,7 +6,7 @@ const filestream = require('fs');
 const wordsCounter = {};
 
 function streamReader(chunk) {
-    var words = chunk.replace(/[0-9]/g, '').split(" ");
+    var words = chunk.replace(/[0-9{}"",/]/g, '').split(" ");
     words.map((word) => {
         console.log("mapped word : " + word);
         if (wordsCounter[word] == null) {
@@ -17,21 +17,29 @@ function streamReader(chunk) {
         }
     });
     console.log("sorted words counters  " + Object.values(wordsCounter).sort());
-    updateGivenWords(wordsCounter);
+    updateReadWords(wordsCounter);
 }
 
 const WORDS_FILENAME = 'wordsFileName.txt';
 
-function updateGivenWords(wordsCounter) {
-    // ensureFileExists(WORDS_FILENAME);
+function updateReadWords(wordsCounter) {
+    if (!filestream.existsSync(WORDS_FILENAME)) {
+        filestream.writeFileSync(WORDS_FILENAME, '{}');
+    }
     filestream.readFile(WORDS_FILENAME, (err, data) => {
         if (err) throw err;
         if (data != null) {
             var currentWords = JSON.parse(data);
+            console.log("current words : " + JSON.stringify(wordsCounter));
             addToCurrentWords(currentWords, wordsCounter);
+            var writeToFile = JSON.stringify(currentWords);
+            console.log("to write : " + writeToFile);
             filestream.writeFile(WORDS_FILENAME, JSON.stringify(currentWords), (err) => {
-                console.log(err); 
-                throw err;
+                if (err)  {
+                    console.log('err = ' + err); 
+                    throw err;
+                }
+                console.log('file saved');
             });
         }
     });
@@ -45,11 +53,12 @@ function ensureFileExists(filename) {
 
 function addToCurrentWords(currentWords, wordsCounter) {
     for (let [key, value] of Object.entries(wordsCounter)) {
-        if (currentWords[key] == null) {
-            currentWords[key] = value;
+        console.log("key " + key + " value " + value);
+        if (currentWords[key]) {
+            currentWords[key]+= value;
         }
         else {
-            currentWords[key]+= value;
+            currentWords[key] = value;
         }    
     }
     
