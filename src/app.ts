@@ -8,6 +8,7 @@ var router = require('./routes/routes.js');
 
 const app: express.Application = express();
 
+app.use(express.static('public'));
 app.use(router);
 
 // view engine setup

@@ -4,10 +4,14 @@ function handleByMethod(req, res) {
     switch(req.query.method) {
         case 'file':
             handleFileRequest(req, res);
+            res.write('ok');
+            res.end();    
             break;
         case 'url':
             console.log('url');
             handleUrlRequest(req, res);
+            res.write('ok');
+            res.end();    
             break;
         case 'data':
         default:
@@ -15,13 +19,35 @@ function handleByMethod(req, res) {
     }
 }
 
+
+function handleUrlRequest(req, res) {
+    console.log('handleUrlRequest')
+    const http = require('http')
+    const options = {
+        hostname: 'localhost',
+        port: 3000,
+        path: '/testfile.txt',
+        method: 'GET'
+    }
+
+    console.log('requesting ' )
+    const url_req = http.request(options, response => {
+        console.log(`statusCode for url request: ${response.statusCode}`)
+        handleDataRequest(req, response);
+    })
+    console.log('requesting ' + url_req)
+
+    url_req.on('error', error => {
+        console.error(error)
+    })
+
+    url_req.end()
+}
+
 function handleDataRequest(req, res) {
+    console.log('handleDataRequest')    
     var streamCleaner = require('../lib/streamCleaner')();
-    let body = '';
-    // Get the data as utf8 strings.
-    // If an encoding is not set, Buffer objects will be received.
     req.setEncoding('utf8');
-    var counter = 1;
     req.on('data', streamCleaner.handleChunk);
   
     // The 'end' event indicates that the entire body has been received.
