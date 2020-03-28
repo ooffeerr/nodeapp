@@ -1,6 +1,4 @@
 
-var streamCleaner = require('../lib/streamCleaner');
-
 function handleByMethod(req, res) { 
     console.log('handling request of type ' + req.query.method);
     switch(req.query.method) {
@@ -18,6 +16,7 @@ function handleByMethod(req, res) {
 }
 
 function handleDataRequest(req, res) {
+    var streamCleaner = require('../lib/streamCleaner')();
     let body = '';
     // Get the data as utf8 strings.
     // If an encoding is not set, Buffer objects will be received.
@@ -30,10 +29,19 @@ function handleDataRequest(req, res) {
     //   body += chunk;
     // });
   
-    req.on('data', streamCleaner);
+    var counter = 1;
+    req.on('data', streamCleaner.handleChunk);
+    // req.on('data', () => {
+        
+    //     var common = require('../lib/CommonModule')();
+    //     counter+=1;
+    //     common.init('lalalal' + counter);
+    //     console.log(common.getName());
+    // });
   
     // The 'end' event indicates that the entire body has been received.
     req.on('end', () => {
+        streamCleaner.persistWords();
       try {
         // Write back something interesting to the user:
         res.write('ok');
