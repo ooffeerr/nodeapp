@@ -7,9 +7,9 @@ var streamCleaner = function () {
         
         handleChunk: function (chunk) {
             console.log("handling chunk of size  " + chunk.length);
-            var words = chunk.replace(/[0-9{}"",/]/g, '').split(" ");
+            var words = JSON.stringify(chunk).replace(/[0-9{}"",/]/g, '').split(" ");
             words.map((word) => {
-                if (wordsCounter[word]) {   
+                if (wordsCounter[word]) {
                     wordsCounter[word] = wordsCounter[word] + 1;
                 }
                 else {

@@ -11,7 +11,7 @@ function handleByMethod(req, res) {
             console.log('url');
             handleUrlRequest(req, res);
             res.write('ok');
-            res.end();    
+            res.end();
             break;
         case 'data':
         default:
@@ -23,25 +23,16 @@ function handleByMethod(req, res) {
 function handleUrlRequest(req, res) {
     console.log('handleUrlRequest')
     const http = require('http')
-    const options = {
-        hostname: 'localhost',
-        port: 3000,
-        path: '/testfile.txt',
-        method: 'GET'
-    }
-
-    console.log('requesting ' )
-    const url_req = http.request(options, response => {
-        console.log(`statusCode for url request: ${response.statusCode}`)
-        handleDataRequest(req, response);
+    req.setEncoding('utf8');
+    req.on('data', (data) => {
+        console.log('fetching ' + data)
+        const url_req = http.get(data, {encoding: 'utf8'}, response => {
+            console.log(`statusCode for url request: ${response.statusCode}`)
+            var streamCleaner = require('../lib/streamCleaner')();
+            response.on('data', streamCleaner.handleChunk);
+        })
+    
     })
-    console.log('requesting ' + url_req)
-
-    url_req.on('error', error => {
-        console.error(error)
-    })
-
-    url_req.end()
 }
 
 function handleDataRequest(req, res) {
