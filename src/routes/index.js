@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var requestHandler = require('../lib/requestHandler');
+var statistics = require('../lib/statistics')();
+
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
   res.send('It is alive!!!');
 });
 
@@ -15,4 +17,17 @@ router.post('/words', ((req, res) => {
   requestHandler(req, res);
 }));
 
+router.get('/statistics', ((req, res) => {
+  var word = req.query['word'];
+  console.log('querying for ' + word);
+  var count = statistics.count(word);
+  if (count) {
+    res.write(JSON.stringify(count));
+    res.end();
+  }
+  else {
+    res.write('error');
+    res.sendStatus(404);
+  }
+}));
 module.exports = router;

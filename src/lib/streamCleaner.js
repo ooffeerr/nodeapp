@@ -4,6 +4,7 @@ var streamCleaner = function () {
     const wordsCounter = {};
     const WORDS_FILENAME = 'wordsFileName.txt';
     return {
+        
         handleChunk: function (chunk) {
             console.log("handling chunk of size  " + chunk.length);
             var words = chunk.replace(/[0-9{}"",/]/g, '').split(" ");

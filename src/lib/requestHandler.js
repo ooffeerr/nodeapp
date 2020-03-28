@@ -21,23 +21,8 @@ function handleDataRequest(req, res) {
     // Get the data as utf8 strings.
     // If an encoding is not set, Buffer objects will be received.
     req.setEncoding('utf8');
-    
-  
-    // Readable streams emit 'data' events once a listener is added.
-    // req.on('data', (chunk) => {
-    //   console.log('on chunk' + chunk);
-    //   body += chunk;
-    // });
-  
     var counter = 1;
     req.on('data', streamCleaner.handleChunk);
-    // req.on('data', () => {
-        
-    //     var common = require('../lib/CommonModule')();
-    //     counter+=1;
-    //     common.init('lalalal' + counter);
-    //     console.log(common.getName());
-    // });
   
     // The 'end' event indicates that the entire body has been received.
     req.on('end', () => {
