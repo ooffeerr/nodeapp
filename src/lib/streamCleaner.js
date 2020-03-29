@@ -2,12 +2,22 @@ const filestream = require('fs');
 
 var streamCleaner = function () {
     const wordsCounter = {};
+    var previousChunkPrefix = '';
     const WORDS_FILENAME = 'wordsFileName.txt';
     return {
         
         handleChunk: function (chunk) {
-            console.log("handling chunk of size  " + chunk.length);
-            var words = JSON.stringify(chunk).replace(/[0-9{}"",/]/g, '').split(" ");
+            // prepending the leftover from the last chunk
+            if (previousChunkPrefix) {
+                chunk = previousChunkPrefix + chunk
+            }
+            previousChunkPrefix = ''
+            
+            console.log("handling chunk of size  " + chunk.length)
+            var words = JSON.stringify(chunk).replace(/\W/g, "  ").split(" ");
+            console.log('words: '  + words)
+            
+            keepChunkOverflow(words.pop())
             words.map((word) => {
                 if (wordsCounter[word]) {
                     wordsCounter[word] = wordsCounter[word] + 1;
@@ -27,10 +37,8 @@ var streamCleaner = function () {
                 if (err) throw err;
                 if (data != null) {
                     var currentWords = JSON.parse(data);
-                    // console.log("current words : " + JSON.stringify(wordsCounter));
                     addToCurrentWords(currentWords, wordsCounter);
                     var writeToFile = JSON.stringify(currentWords);
-                    // console.log("to write : " + writeToFile);
                     filestream.writeFile(WORDS_FILENAME, JSON.stringify(currentWords), (err) => {
                         if (err) {
                             console.log('err = ' + err);
@@ -43,10 +51,17 @@ var streamCleaner = function () {
         }
     }
 
+    // if the last word for chunk doesn't end with whitespace - we should prepend it to the next chunk
+    function keepChunkOverflow(lastWord) {
+        console.log('keepChunkOverflow' + lastWord)
+        if (lastWord.trim().length != 0) { // this chunk ends mid-text. kee
+            previousChunkPrefix = lastWord;
+        }
+    }
+
     function addToCurrentWords (currentWords, wordsCounter) {
         console.log('updating ' + Object.entries(wordsCounter).length + ' entries');
         for (let [key, value] of Object.entries(wordsCounter)) {
-            // console.log("key " + key + " value " + value);
             if (currentWords[key]) {
                 currentWords[key] += value;
             }
