@@ -14,9 +14,8 @@ var streamCleaner = function () {
             previousChunkPrefix = ''
             
             console.log("handling chunk of size  " + chunk.length)
-            var words = JSON.stringify(chunk).replace(/\W/g, "  ").split(" ");
-            console.log('words: '  + words)
-            
+            var words = JSON.stringify(chunk).toLowerCase().replace(/\W/g, "  ").replace(/[0-9]/g, ' ').split(" ");
+            console.log('words : ' + words)
             keepChunkOverflow(words.pop())
             words.map((word) => {
                 if (wordsCounter[word]) {
@@ -38,7 +37,6 @@ var streamCleaner = function () {
                 if (data != null) {
                     var currentWords = JSON.parse(data);
                     addToCurrentWords(currentWords, wordsCounter);
-                    var writeToFile = JSON.stringify(currentWords);
                     filestream.writeFile(WORDS_FILENAME, JSON.stringify(currentWords), (err) => {
                         if (err) {
                             console.log('err = ' + err);

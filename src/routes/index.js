@@ -26,8 +26,8 @@ router.get('/statistics', ((req, res) => {
     res.end();
   }
   else {
-    res.write('error');
-    res.sendStatus(404);
+    res.write('0');
+    res.end();
   }
 }));
 module.exports = router;
