@@ -11,9 +11,9 @@ function init() {
       var sqlite3 = require('sqlite3').verbose();
       const path = require('path')
       const dbPath = path.resolve(__dirname, 'words.db')
+      db = new sqlite3.Database(dbPath)
       if (!fs.existsSync(dbPath)) {
         console.log('creating db')
-        db = new sqlite3.Database(dbPath)
         db.serialize(function() {
           db.run("CREATE TABLE IF NOT EXISTS words (id INTEGER PRIMARY KEY, word TEXT)");
           db.run("INSERT INTO words values ('1', '{}')")

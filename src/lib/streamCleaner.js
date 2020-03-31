@@ -6,7 +6,7 @@ var streamCleaner = function () {
 
     return {    
         handleChunk: function (chunk) {
-            console.log('processing chunk of size' + chunk.length)
+            console.log('processing chunk of size ' + chunk.length)
             // prepending the leftover from the last chunk
             if (previousChunkPrefix) {
                 chunk = previousChunkPrefix + chunk
