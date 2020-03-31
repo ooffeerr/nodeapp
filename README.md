@@ -13,4 +13,4 @@ curl -d "public/testfile.txt" -X POST http://localhost:3000/words?method=file
 curl -d "http://localhost:3000/testfile.txt" -X POST http://localhost:3000/words?method=url
 
 querying for a word statistic:
-curl -X GET http://localhost:3000/statistics?word=who
+1. curl -X GET http://localhost:3000/statistics?word=who
