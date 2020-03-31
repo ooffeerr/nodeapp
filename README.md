@@ -1,6 +1,7 @@
 Hi!
 starting the app: 
 `npm install && npm run dev`
+
 uploading new words:
 please use the `words` endpoint, with a 'method' search param for choosing upload type.
 examples:
@@ -10,5 +11,6 @@ curl -d "Hi! My name is (what?), my name is (who?), my name is Slim Shady" -X PO
 curl -d "public/testfile.txt" -X POST http://localhost:3000/words?method=file
 3. for the uri request
 curl -d "http://localhost:3000/testfile.txt" -X POST http://localhost:3000/words?method=url
-4. for fetching a statistic - 
+
+querying for a word statistic - 
 curl -X GET http://localhost:3000/statistics?word=who
