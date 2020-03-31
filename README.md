@@ -12,5 +12,5 @@ curl -d "public/testfile.txt" -X POST http://localhost:3000/words?method=file
 3. for the uri request
 curl -d "http://localhost:3000/testfile.txt" -X POST http://localhost:3000/words?method=url
 
-querying for a word statistic - 
+querying for a word statistic:
 curl -X GET http://localhost:3000/statistics?word=who
