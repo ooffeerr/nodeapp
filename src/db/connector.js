@@ -12,7 +12,6 @@ function init() {
       db = new sqlite3.Database(dbPath)
       db.serialize(function() {
         db.run("CREATE TABLE IF NOT EXISTS words (id INTEGER PRIMARY KEY, word TEXT)");
-        // db.run("INSERT INTO words values ('2', '{}')")
       })
     }, 
 
@@ -25,7 +24,6 @@ function init() {
     },
 
     saveWords: function(dictionary) {
-      console.log('saving ' + dictionary)
       db.run(`UPDATE words SET word = '${JSON.stringify(dictionary)}' WHERE id = 2`);
     }
   }

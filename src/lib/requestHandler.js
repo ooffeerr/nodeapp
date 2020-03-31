@@ -43,14 +43,16 @@ function handleDataRequest(req, res) {
 
 function handleUrlRequest(req, res) {
     console.log('handleUrlRequest')
+    var streamCleaner = require('../lib/streamCleaner')();
+
     const http = require('http')
     req.setEncoding('utf8');
     req.on('data', (url) => {
         console.log('fetching ' + url)
         const url_req = http.get(url, { encoding: 'utf8' }, response => {
-            console.log(`statusCode for url request: ${response.statusCode}`)
-            var streamCleaner = require('../lib/streamCleaner')();
+            console.log(`statusCode for url request: ${response.statusCode}`)        
             response.on('data', streamCleaner.handleChunk);
+            response.on('end', streamCleaner.persistWords);
         })
 
     })
