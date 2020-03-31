@@ -6,7 +6,8 @@ import logger from 'morgan';
 var router = require('./routes/routes.js');
 
 const app: express.Application = express();
-
+var db = require('./db/connector.js')();
+db.ensureDbInit()
 app.use(express.static('public'));
 app.use(router);
 

@@ -1,8 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var requestHandler = require('../lib/requestHandler');
-var statistics = require('../lib/statistics')();
-
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -18,16 +16,10 @@ router.post('/words', ((req, res) => {
 }));
 
 router.get('/statistics', ((req, res) => {
+  var statistics = require('../lib/statistics')();
   var word = req.query['word'];
   console.log('querying for ' + word);
-  var count = statistics.count(word);
-  if (count) {
-    res.write(JSON.stringify(count));
-    res.end();
-  }
-  else {
-    res.write('0');
-    res.end();
-  }
+  statistics.countAndRespond(word, res);
+
 }));
 module.exports = router;

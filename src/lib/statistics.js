@@ -1,10 +1,21 @@
-var fs = require('fs');
-const WORDS_FILENAME = 'wordsFileName.txt';
 var statistics = function () {
+    var db = require('../db/connector')()
+    db.ensureDbInit()
+
     return {
-        count : function(word) {
-            var words =  JSON.parse(fs.readFileSync(WORDS_FILENAME));
-            return words[word];
+        countAndRespond: function (word, res) {
+            const count = db.getWords((result) => {
+                var count = JSON.parse(result)[word];
+                console.log(count)
+                if (count) {
+                    res.write(JSON.stringify(count));
+                    res.end();
+                }
+                else {
+                    res.write('0');
+                    res.end();
+                }
+            })
         }
     }
 }

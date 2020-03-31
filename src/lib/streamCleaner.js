@@ -29,6 +29,10 @@ var streamCleaner = function () {
 
         persistWords: function () {
             console.log('persisting');
+            var db = require('../db/connector.js')()
+            db.ensureDbInit();
+            // db.saveWords()
+
             if (!filestream.existsSync(WORDS_FILENAME)) {
                 filestream.writeFileSync(WORDS_FILENAME, '{}');
             }
@@ -37,6 +41,10 @@ var streamCleaner = function () {
                 if (data != null) {
                     var currentWords = JSON.parse(data);
                     addToCurrentWords(currentWords, wordsCounter);
+                    db.saveWords(currentWords)
+                    db.getWords((res) => {
+                        console.log('res = ' + res)
+                    })
                     filestream.writeFile(WORDS_FILENAME, JSON.stringify(currentWords), (err) => {
                         if (err) {
                             console.log('err = ' + err);
