@@ -3,9 +3,10 @@ const filestream = require('fs');
 var streamCleaner = function () {
     const wordsCounter = {};
     var previousChunkPrefix = '';
-    const WORDS_FILENAME = 'wordsFileName.txt';
+
     return {    
         handleChunk: function (chunk) {
+            console.log('processing chunk of size' + chunk.length)
             // prepending the leftover from the last chunk
             if (previousChunkPrefix) {
                 chunk = previousChunkPrefix + chunk
